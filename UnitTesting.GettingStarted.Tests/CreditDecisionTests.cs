@@ -13,34 +13,71 @@ namespace UnitTesting.GettingStarted.Tests
     [TestFixture]
     public class CreditDecisionTests
     {
-        Mock<ICreditDecisionService> mockCreditDecisionService;
+        #region Private Fields
+        private Mock<ICreditDecisionService> _mockCreditDecisionService;
+        private CreditDecision _systemUnderTest;
+        #endregion
 
-        CreditDecision systemUnderTest;
+        [SetUp]
+        public void Init()
+        {
+            _mockCreditDecisionService = new Mock<ICreditDecisionService>(MockBehavior.Strict);
+            _systemUnderTest = new CreditDecision(_mockCreditDecisionService.Object);
+        }
+
+        [TearDown]
+        public void CleanUp()
+        {
+            _mockCreditDecisionService = null;
+            _systemUnderTest = null;
+        }
+
+        #region Tests
 
         [TestCase(100, "Declined")]
         [TestCase(549, "Declined")]
         [TestCase(550, "Maybe")]
         [TestCase(674, "Maybe")]
-        [TestCase(574, "We look forward to doing business with you!")]
+        [TestCase(676, "We look forward to doing business with you!")]
         public void MakeCreditDecision_Always_ReturnsExpectedResult(int creditScore, string expectedResult)
         {
             #region Arrange
-            mockCreditDecisionService = new Mock<ICreditDecisionService>(MockBehavior.Strict);
-            mockCreditDecisionService.Setup(p => p.GetDecision(creditScore)).Returns(expectedResult);
+            _mockCreditDecisionService.Setup(p => p.GetCreditScore()).Returns(creditScore);
 
 
-            systemUnderTest = new CreditDecision(mockCreditDecisionService.Object);
             #endregion
 
             #region Act
-            var result = systemUnderTest.MakeCreditDecision(creditScore);
+            string result = _systemUnderTest.MakeCreditDecision();
             #endregion
 
             #region Assert
             Assert.That(result, Is.EqualTo(expectedResult));
 
-            mockCreditDecisionService.VerifyAll();
+            _mockCreditDecisionService.VerifyAll();
             #endregion
         }
+
+
+        [TestCase(576, "We look forward to doing business with you!")]
+        public void MakeCreditDecision_Always_NotReturnsExpectedResult(int creditScore, string expectedResult)
+        {
+            #region Arrange
+            _mockCreditDecisionService.Setup(p => p.GetCreditScore()).Returns(creditScore);
+
+            #endregion
+
+            #region Act
+            string result = _systemUnderTest.MakeCreditDecision();
+            #endregion
+
+            #region Assert
+            Assert.That(result, Is.Not.EqualTo(expectedResult));
+
+            _mockCreditDecisionService.VerifyAll();
+            #endregion
+        }
+
+        #endregion
     }
 }

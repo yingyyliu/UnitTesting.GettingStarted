@@ -15,14 +15,27 @@ namespace UnitTesting.GettingStarted.CreditDecisionExample
             this._creditDecisionService = creditDecisionService;
         }
 
-        public string MakeCreditDecision(int creditScore)
+        public string MakeCreditDecision()
         {
-            return _creditDecisionService.GetDecision(creditScore);
+            int creditScore = _creditDecisionService.GetCreditScore();
+
+            if (creditScore < 550)
+            {
+                return "Declined";
+            }
+            else if (creditScore <= 675)
+            {
+                return "Maybe";
+            }
+            else
+            {
+                return "We look forward to doing business with you!";
+            }
         }
     }
 
     public interface ICreditDecision
     {
-        string MakeCreditDecision(int creditScore);
+        string MakeCreditDecision();
     }
 }
