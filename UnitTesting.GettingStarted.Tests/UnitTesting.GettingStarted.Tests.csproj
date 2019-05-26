@@ -54,11 +54,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreditDecisionTests.cs" />
     <Compile Include="HelloNUnit.cs" />
     <Compile Include="TestClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UnitTesting.GettingStarted\UnitTesting.GettingStarted.csproj">
+      <Project>{3F6C48D5-FF3E-4FD3-9308-96AD2F317994}</Project>
+      <Name>UnitTesting.GettingStarted</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
